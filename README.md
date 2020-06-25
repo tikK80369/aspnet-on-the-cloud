@@ -3,3 +3,4 @@
 [ASP.NET とASP.NET Coreについて](./docs/dotnet.md)
 
 [DocFXを使用したドキュメントの作成](./docfx-documentation)
+ ⇒[Web Page](https://team-care.github.io/aspnet-on-the-cloud/)
