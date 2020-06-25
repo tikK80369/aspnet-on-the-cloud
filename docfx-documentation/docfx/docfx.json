@@ -1,0 +1,99 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "**/*.sln", "**/*.csproj" ],
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src": ".."
+        }
+      ],
+      "dest": "obj/api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "**/*.yml" ],
+        "src": "obj/api",
+        "dest": "api"
+      },
+      {
+        "files": [ "documents/**/*.md", "*.md", "toc.yml", "restapi/**" ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [ "documents/images/**.jpg"],
+        "exclude": [
+          "**/bin/**",
+          "**/obj/**",
+          "_site_pdf/**"
+        ]
+      }
+    ],
+    "template": [
+      "default",
+      "DocFx.Plugins.PlantUml/template"
+    ],
+    "globalMetadata": {
+      "_appTitle": "docfx",
+      "_enableSearch": true
+    },
+    "dest": "_site",
+    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ]
+  },
+  "pdf": {
+    "content": [
+      {
+        "files": [
+          "obj/api/**.yml"
+        ],
+        "exclude": [
+          "**/toc.yml",
+          "**/toc.md"
+        ]
+      },
+      {
+        "files": [
+          "documents/**.md",
+          "documents/**/toc.yml",
+          "restapi/**.md",
+          "restapi/**/toc.yml",
+          "restapi/**/*.json",
+          "toc.yml",
+          "*.md",
+          "pdf/*"
+        ],
+        "exclude": [
+          "**/bin/**",
+          "**/obj/**",
+          "_site_pdf/**",
+          "**/toc.yml",
+          "**/toc.md"
+        ]
+      },
+      {
+        "files": "pdf/toc.yml"
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "documents/images/**"
+        ],
+        "exclude": [
+          "**/bin/**",
+          "**/obj/**",
+          "_site_pdf/**"
+        ]
+      }
+    ],
+    "template": [
+      "pdf.default",
+      "DocFx.Plugins.PlantUml/template",
+      "pluginPackages/rest.tagpage.2.31.0/content"
+    ],
+    "dest": "_site_pdf"
+  }
+}
