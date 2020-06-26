@@ -36,6 +36,14 @@ namespace MathLibraryTest
             MyMath.Add(number1, number2);
         }
         [TestMethod]
+        [ExpectedException(typeof(System.OverflowException))]
+        public void TestAddDoubleOverflow()
+        {
+            double number1 = 1.7976931348623157E+308;
+            double number2 = 3;
+            MyMath.Add(number1, number2);
+        }
+        [TestMethod]
         public void TestSubtractInt()
         {
             int number1 = 7;
