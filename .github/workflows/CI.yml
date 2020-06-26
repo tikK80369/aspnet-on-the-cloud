@@ -25,5 +25,4 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${ REPORT_PATH }
-        working-directory: docfx-documentation
+          file: docfx-documentation/${ REPORT_PATH }
