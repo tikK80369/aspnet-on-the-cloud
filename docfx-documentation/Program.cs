@@ -25,10 +25,10 @@ namespace main
                     if (String.IsNullOrEmpty(input)) break;
                     row += 1;
                     double b = double.Parse(input);
-                    Console.WriteLine($"{a} + {b} = {Math.Add(a, b)}");
-                    Console.WriteLine($"{a} - {b} = {Math.Subtract(a, b)}");
-                    Console.WriteLine($"{a} * {b} = {Math.Multiply(a, b)}");
-                    Console.WriteLine($"{a} / {b} = {Math.Divide(a, b)}");
+                    Console.WriteLine($"{a} + {b} = {MyMath.Add(a, b)}");
+                    Console.WriteLine($"{a} - {b} = {MyMath.Subtract(a, b)}");
+                    Console.WriteLine($"{a} * {b} = {MyMath.Multiply(a, b)}");
+                    Console.WriteLine($"{a} / {b} = {MyMath.Divide(a, b)}");
                     row += 4;
                 }
                 catch

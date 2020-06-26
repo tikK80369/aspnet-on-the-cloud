@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="MathLibrary\MathLibrary.csproj" />
+    <ProjectReference Include="MathLibraryTest\MathLibraryTest.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
