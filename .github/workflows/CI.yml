@@ -1,8 +1,8 @@
+name: .NET Core CI
 on:
   push:
     branches:
       - master
-  name: .NET Core CI
 jobs:
   test:
     runs-on: ubuntu-latest
