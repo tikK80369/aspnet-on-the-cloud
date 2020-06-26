@@ -16,13 +16,14 @@ jobs:
         run: dotnet build 
         working-directory: docfx-documentation
       - name: .NET Test
+        id: dotnet_test
         run: |
             dotnet test --collect:"XPlat Code Coverage"
             REPORT_PATH=`find ./ -name "coverage*.xml"`
-            echo ${ REPORT_PATH }
+            echo ::set-output name=report_path::${ REPORT_PATH }
         working-directory: docfx-documentation
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: docfx-documentation/${ REPORT_PATH }
+          file: docfx-documentation/${{ steps.dotnet_test.outputs.report_path }}
