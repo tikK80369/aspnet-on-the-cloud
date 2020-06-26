@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - master
+  name: .NET Core CI
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+      - name: .NET Build
+        run: dotnet build 
+        working-directory: docfx-documentation
+      - name: .NET Test
+        run: dotnet test --collect:"XPlat Code Coverage"
+        working-directory: docfx-documentation
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v1
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
+      #     file: ./coverage.xml
+      #   working-directory: docfx-documentation
