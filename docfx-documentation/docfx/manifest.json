@@ -1,0 +1,313 @@
+{
+  "homepages": [],
+  "source_base_path": "C:/Users/TIE305645/Documents/SourceCode/aspnet-on-the-cloud/docfx-documentation/docfx",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      },
+      "is_incremental": false
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "_site/documents/images/CARE.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "_site/documents/images/CARE.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "_site/template/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "_site/template/logo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "_site_pdf/docfx_pdf.pdf",
+      "output": {
+        "resource": {
+          "relative_path": "_site_pdf/docfx_pdf.pdf"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "documents/DocFX.md",
+      "output": {
+        ".html": {
+          "relative_path": "documents/DocFX.html",
+          "hash": "3VI6W2Y2jSPYxToE9teV/Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "documents/DotNet.md",
+      "output": {
+        ".html": {
+          "relative_path": "documents/DotNet.html",
+          "hash": "NM2Fj7aFtqEq9VQ8+Qq/Tw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "documents/Test.md",
+      "output": {
+        ".html": {
+          "relative_path": "documents/Test.html",
+          "hash": "SA+eKNI5Iz9PtpqNfnxEvA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "documents/images/CARE.jpg",
+      "output": {
+        "resource": {
+          "relative_path": "documents/images/CARE.jpg"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "documents/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "documents/toc.html",
+          "hash": "6Ey1SaYphv1XJWtUnAgvfA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "index",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "wPiWSXk7ujrpa+1iWWIliw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/MathLibrary.MyMath.yml",
+      "output": {
+        ".html": {
+          "relative_path": "obj/api/MathLibrary.MyMath.html",
+          "hash": "wng3HDxdgVTm1PSGArW7dw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/MathLibrary.yml",
+      "output": {
+        ".html": {
+          "relative_path": "obj/api/MathLibrary.html",
+          "hash": "EyjIj7XS5tkOdQ3fRWhOxA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/MathLibraryTest.MyMathTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "obj/api/MathLibraryTest.MyMathTest.html",
+          "hash": "84eY4DPv90adTlWznkDTfQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/MathLibraryTest.yml",
+      "output": {
+        ".html": {
+          "relative_path": "obj/api/MathLibraryTest.html",
+          "hash": "I1bkLhzZ1x12lQD06vTMfA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "obj/api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "obj/api/toc.html",
+          "hash": "DFtfAN6K0964l2dYOc5OCw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "RestApi",
+      "source_relative_path": "restapi/contacts_swagger2.json",
+      "output": {
+        ".html": {
+          "relative_path": "restapi/contacts.html",
+          "hash": "0zMYhtY/U3yzhPRycrjFpA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "RestApi",
+      "source_relative_path": "restapi/petstore.swagger.json",
+      "output": {
+        ".html": {
+          "relative_path": "restapi/petstore.html",
+          "hash": "8HQ1jmbUk+4JfALx7FxAyg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "restapi/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "restapi/toc.html",
+          "hash": "g2yLwusRFaP12hEPUojbUg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "template/favicon.ico",
+      "output": {
+        "resource": {
+          "relative_path": "template/favicon.ico"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "template/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "template/logo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "5ETfhANm/xzztaK/pkYb+Q=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because config changed.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "ConfigChanged"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "RestApiDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor RestApiDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
