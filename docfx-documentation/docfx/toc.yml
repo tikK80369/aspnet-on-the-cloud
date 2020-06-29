@@ -1,8 +1,5 @@
-﻿- name: ホーム
-  href: index.md
-- name: 開発ドキュメント
+﻿- name: 開発ドキュメント
   href: documents/
-  homepage: documents/introduction.md
 - name: API ドキュメント
   href: obj/api/
 - name: REST API ドキュメント

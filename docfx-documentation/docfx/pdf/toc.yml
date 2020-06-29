@@ -1,8 +1,6 @@
-- name: ホーム
-  href: ../index.md
 - name: 開発ドキュメント
-  href: ../documents/toc.md
+  href: ../documents/toc.yml
 - name: API ドキュメント
   href: ../obj/api/toc.yml
 - name: REST API ドキュメント
-  href: ../restapi/toc.md
+  href: ../restapi/toc.yml

@@ -3,8 +3,14 @@
     {
       "src": [
         {
-          "files": [ "**/*.sln", "**/*.csproj" ],
-          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "files": [
+            "**/*.sln",
+            "**/*.csproj"
+          ],
+          "exclude": [
+            "**/bin/**",
+            "**/obj/**"
+          ],
           "src": ".."
         }
       ],
@@ -14,67 +20,70 @@
   "build": {
     "content": [
       {
-        "files": [ "**/*.yml" ],
-        "src": "obj/api",
-        "dest": "api"
-      },
-      {
-        "files": [ "documents/**/*.md", "*.md", "toc.yml", "restapi/**" ]
+        "files": [
+          "toc.yml",
+          "index.md",
+          "documents/**/*.yml",
+          "documents/**/*.md",
+          "obj/api/*",
+          "restapi/*.yml",
+          "restapi/*.json"
+        ]
       }
     ],
     "resource": [
       {
-        "files": [ "documents/images/**.jpg"],
+        "files": [
+          "**/**.jpg",
+          "**/**.png",
+          "**/*.pdf",
+          "template/favicon.ico"
+        ],
         "exclude": [
           "**/bin/**",
-          "**/obj/**",
-          "_site_pdf/**"
+          "**/obj/**"
         ]
       }
     ],
     "template": [
       "default",
+      "template/material",
       "DocFx.Plugins.PlantUml/template"
     ],
     "globalMetadata": {
-      "_appTitle": "docfx",
-      "_enableSearch": true
+      "_appTitle": "aspnet on the cloud",
+      "_appFooter": "© 2020 Team Care.",
+      "_enableSearch": true,
+      "_disableContribution": false,
+      "_appLogoPath": "template/favicon.ico",
+      "_appFaviconPath": "template/logo.png"
     },
     "dest": "_site",
-    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ]
+    "disableGitFeatures": true,
+    "xrefService": [
+      "https://xref.docs.microsoft.com/query?uid={uid}"
+    ]
   },
   "pdf": {
     "content": [
       {
-        "files": [
-          "obj/api/**.yml"
-        ],
-        "exclude": [
-          "**/toc.yml",
-          "**/toc.md"
-        ]
+        "files": "pdf/toc.yml"
       },
       {
         "files": [
-          "documents/**.md",
-          "documents/**/toc.yml",
-          "restapi/**.md",
-          "restapi/**/toc.yml",
-          "restapi/**/*.json",
-          "toc.yml",
-          "*.md",
+          "obj/api/*.yml",
+          "documents/*.md",
+          "documents/*.yml",
+          "restapi/*.yml",
+          "restapi/*.json",
           "pdf/*"
         ],
         "exclude": [
           "**/bin/**",
           "**/obj/**",
-          "_site_pdf/**",
           "**/toc.yml",
           "**/toc.md"
         ]
-      },
-      {
-        "files": "pdf/toc.yml"
       }
     ],
     "resource": [
@@ -89,10 +98,11 @@
         ]
       }
     ],
+    "tocTitle": "目次",
     "template": [
       "pdf.default",
-      "DocFx.Plugins.PlantUml/template",
-      "pluginPackages/rest.tagpage.2.31.0/content"
+      "template/material",
+      "DocFx.Plugins.PlantUml/template"
     ],
     "dest": "_site_pdf"
   }
