@@ -8,7 +8,7 @@
     <title>DocFX&#12434;&#20351;&#29992;&#12375;&#12383;&#12489;&#12461;&#12517;&#12513;&#12531;&#12488;&#12398;&#20316;&#25104; | aspnet on the cloud </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="DocFX&#12434;&#20351;&#29992;&#12375;&#12383;&#12489;&#12461;&#12517;&#12513;&#12531;&#12488;&#12398;&#20316;&#25104; | aspnet on the cloud ">
-    <meta name="generator" content="docfx 2.55.0.0">
+    <meta name="generator" content="docfx 2.49.0.0">
     
     <link rel="shortcut icon" href="../template/logo.png">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -153,7 +153,9 @@ ENV LANG ja_JP.UTF-8
 ENV PATH /docfx:${PATH}
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ Asia/Tokyo
+ADD entrypoint.sh /usr/local/bin/docfx
 
+# aptパッケージインストール
 RUN apt-get update -y &amp;&amp; \
     apt-get install -y --no-install-recommends \
         apt-transport-https \
@@ -168,6 +170,7 @@ RUN apt-get update -y &amp;&amp; \
         wget \
         unzip
 
+# ASP.NET環境構築
 RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb &amp;&amp; \
     dpkg -i packages-microsoft-prod.deb &amp;&amp; \
     apt-get update -y &amp;&amp; \
@@ -175,34 +178,39 @@ RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-p
         aspnetcore-runtime-3.1 \
         dotnet-sdk-3.1
 
-RUN export GNUPGHOME=&quot;$(mktemp -d)&quot; &amp;&amp; \
-    gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &amp;&amp; \
-    gpg --batch --export --armor 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &gt; /etc/apt/trusted.gpg.d/mono.gpg.asc &amp;&amp; \
-    gpgconf --kill all &amp;&amp; \
-    rm -rf &quot;$GNUPGHOME&quot; &amp;&amp; \
-    apt-key list | grep Xamarin &amp;&amp; \
+# monoインストール
+# ----- noproxy環境の場合 -----
+# RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF &amp;&amp; \
+
+# ------ proxy環境の場合 ------
+ADD key.txt .
+RUN cat key.txt | apt-key add - &amp;&amp; \
+# ----------------------------
     echo &quot;deb https://download.mono-project.com/repo/ubuntu stable-bionic main&quot; | tee /etc/apt/sources.list.d/mono-official-stable.list &amp;&amp; \
     apt-get update -y &amp;&amp; \
     apt-get install -y --no-install-recommends \
         mono-complete \
         mono-runtime &amp;&amp; \
     apt-get update -y &amp;&amp; \
-    apt-get upgrade -y
+    apt-get upgrade -y &amp;&amp; \
+    rm key.txt
 
+# wkhtmltopdfインストール
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb &amp;&amp; \
     apt-get install -y ./wkhtmltox_0.12.5-1.bionic_amd64.deb &amp;&amp; \
     rm ./wkhtmltox_0.12.5-1.bionic_amd64.deb
 
+# nodejsインストール
 RUN npm install -g npm &amp;&amp; \
     npm cache clean &amp;&amp; \
     npm install n -g &amp;&amp; \
     n stable &amp;&amp; \
     ln -sf /usr/local/bin/node /usr/bin/node
 
+# DocFXインストール（v2.5以上の場合、metadataオプションが動作しない）
 ADD https://github.com/dotnet/docfx/releases/download/v2.49/docfx.zip /
 RUN unzip /docfx.zip -d /docfx &amp;&amp; \
     rm /docfx.zip
-ADD entrypoint.sh /usr/local/bin/docfx
 RUN chmod 777 /usr/local/bin/docfx &amp;&amp; \
     chmod 777 /docfx/docfx.exe &amp;&amp; \
     rm -rf /var/lib/apt/lists/* /tmp/*
@@ -211,6 +219,49 @@ WORKDIR /work
 </code></pre><pre><code class="lang-bash:entrypoint.sh">#!/bin/bash
 
 mono &quot;/docfx/docfx.exe&quot; &quot;$@&quot;
+</code></pre><p>プロキシ環境でapt-keyコマンドが動作しなかったので<a href="https://keyserver.ubuntu.com/pks/lookup?search=0x3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF&amp;fingerprint=on&amp;op=index">こちら</a>から公開鍵をダウンロードした。</p>
+<pre><code class="lang-txt:key.txt">-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+kHFYv2XsdQ==
+=45Mw
+-----END PGP PUBLIC KEY BLOCK-----
 </code></pre></li>
 <li><p>作成した環境にファイルをマウントして利用する。</p>
 <pre><code class="lang-bash">docker run --rm -it -v /`pwd`:/work &lt;image名&gt; bash
@@ -258,9 +309,10 @@ mono &quot;/docfx/docfx.exe&quot; &quot;$@&quot;
 <pre><code class="lang-bash">cd &lt;docfx.jsonが存在するディレクトリ&gt;
 </code></pre></li>
 <li><p>ソースコードコメントのyml化</p>
-<pre><code class="lang-bash">docfx metdata
+<pre><code class="lang-bash">docfx metadata
 </code></pre></li>
-<li><p>プラグインのインストール</p>
+<li><p>プラグインのインストール<br>
+Plantumlの描画が可能になる</p>
 <pre><code class="lang-bash">nuget install DocFx.Plugins.PlantUml -ExcludeVersion -OutputDirectory .
 </code></pre></li>
 <li><p>ドキュメントのPDF化</p>
@@ -290,19 +342,19 @@ Windowsの場合、4と5は以下のコマンドでまとめて実施できる</
 <li>PDFにすると画像が消える。</li>
 </ul>
 </li>
-<li><p>noteやwarningなどがPDFで崩れる</p>
+<li><p>PDFにするとnoteやwarningなどが崩れる</p>
 <ul>
 <li>ボックスが崩れる</li>
 </ul>
 </li>
-<li><p>Dockerfileが大きい</p>
+<li><p>Dockerfileのサイズが大きい</p>
 </li>
 </ul>
 <h1 id="ciへの組み込み">CIへの組み込み</h1>
 <p>GitHub Actionsで環境を構築するのはインストールするものが多くて難しいので、GitHub Actions上でDockerを使用する必要がある。<br>
 しかし、上に記載したDockerfileはビルドに約10分ほどかかり、毎回ビルドするのは避けたい。<br>
 そこで、事前にGitHub Package RegistryにビルドしたイメージをPushしておき、GitHub Actions上でそのイメージをpullして利用する。</p>
-<div class="lang-plantUml" \=""> <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="509px" preserveaspectratio="none" style="width:520px;height:509px;" version="1.1" viewbox="0 0 520 509" width="520px" zoomandpan="magnify"><defs><filter height="300%" id="frjk8zvaoqda4" width="300%" x="-1" y="-1"><fegaussianblur result="blurOut" stddeviation="2.0"></fegaussianblur><fecolormatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"></fecolormatrix><feoffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"></feoffset><feblend in="SourceGraphic" in2="blurOut3" mode="normal"></feblend></filter></defs><g><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="48" x2="48" y1="86.2969" y2="422.4922"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="139.5" x2="139.5" y1="86.2969" y2="422.4922"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="281.5" x2="281.5" y1="86.2969" y2="422.4922"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="446.5" x2="446.5" y1="86.2969" y2="422.4922"></line><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="75" x="8" y="82.9951">Developer</text><ellipse cx="48.5" cy="13" fill="#FEFECE" filter="url(#frjk8zvaoqda4)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"></ellipse><path d="M48.5,21 L48.5,48 M35.5,29 L61.5,29 M48.5,48 L35.5,63 M48.5,48 L61.5,63 " fill="none" filter="url(#frjk8zvaoqda4)" style="stroke: #A80036; stroke-width: 2.0;"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="75" x="8" y="434.4873">Developer</text><ellipse cx="48.5" cy="447.7891" fill="#FEFECE" filter="url(#frjk8zvaoqda4)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"></ellipse><path d="M48.5,455.7891 L48.5,482.7891 M35.5,463.7891 L61.5,463.7891 M48.5,482.7891 L35.5,497.7891 M48.5,482.7891 L61.5,497.7891 " fill="none" filter="url(#frjk8zvaoqda4)" style="stroke: #A80036; stroke-width: 2.0;"></path><rect fill="#FEFECE" filter="url(#frjk8zvaoqda4)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="64" x="105.5" y="51"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="50" x="112.5" y="70.9951">GitHub</text><rect fill="#FEFECE" filter="url(#frjk8zvaoqda4)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="64" x="105.5" y="421.4922"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="50" x="112.5" y="441.4873">GitHub</text><rect fill="#FEFECE" filter="url(#frjk8zvaoqda4)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="192" x="183.5" y="51"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="178" x="190.5" y="70.9951">GitHub Package Registry</text><rect fill="#FEFECE" filter="url(#frjk8zvaoqda4)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="192" x="183.5" y="421.4922"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="178" x="190.5" y="441.4873">GitHub Package Registry</text><rect fill="#FEFECE" filter="url(#frjk8zvaoqda4)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="110" x="389.5" y="51"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="96" x="396.5" y="70.9951">GitHub Pages</text><rect fill="#FEFECE" filter="url(#frjk8zvaoqda4)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="110" x="389.5" y="421.4922"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="96" x="396.5" y="441.4873">GitHub Pages</text><rect fill="#EEEEEE" filter="url(#frjk8zvaoqda4)" height="3" style="stroke: #EEEEEE; stroke-width: 1.0;" width="505.5" x="3" y="116.8633"></rect><line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="508.5" y1="116.8633" y2="116.8633"></line><line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="508.5" y1="119.8633" y2="119.8633"></line><rect fill="#EEEEEE" filter="url(#frjk8zvaoqda4)" height="23.1328" style="stroke: #000000; stroke-width: 2.0;" width="108" x="201.75" y="106.2969"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthadjust="spacingAndGlyphs" textlength="89" x="207.75" y="122.3638">pre process</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="48.5" x2="90.5" y1="160.5625" y2="160.5625"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="90.5" x2="90.5" y1="160.5625" y2="173.5625"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="49.5" x2="90.5" y1="173.5625" y2="173.5625"></line><polygon fill="#A80036" points="59.5,169.5625,49.5,173.5625,59.5,177.5625,55.5,173.5625" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="77" x="55.5" y="155.4966">docker build</text><polygon fill="#A80036" points="269.5,198.6953,279.5,202.6953,269.5,206.6953,273.5,202.6953" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="48.5" x2="275.5" y1="202.6953" y2="202.6953"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="69" x="55.5" y="197.6294">docker pull</text><rect fill="#EEEEEE" filter="url(#frjk8zvaoqda4)" height="3" style="stroke: #EEEEEE; stroke-width: 1.0;" width="505.5" x="3" y="231.2617"></rect><line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="508.5" y1="231.2617" y2="231.2617"></line><line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="508.5" y1="234.2617" y2="234.2617"></line><rect fill="#EEEEEE" filter="url(#frjk8zvaoqda4)" height="23.1328" style="stroke: #000000; stroke-width: 2.0;" width="60" x="225.75" y="220.6953"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthadjust="spacingAndGlyphs" textlength="41" x="231.75" y="236.7622">CI/CD</text><polygon fill="#A80036" points="127.5,270.9609,137.5,274.9609,127.5,278.9609,131.5,274.9609" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="48.5" x2="133.5" y1="274.9609" y2="274.9609"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="51" x="55.5" y="269.895">git push</text><polygon fill="#A80036" points="269.5,300.0938,279.5,304.0938,269.5,308.0938,273.5,304.0938" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="275.5" y1="304.0938" y2="304.0938"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="69" x="146.5" y="299.0278">docker pull</text><polygon fill="#A80036" points="150.5,329.2266,140.5,333.2266,150.5,337.2266,146.5,333.2266" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="144.5" x2="280.5" y1="333.2266" y2="333.2266"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="40" x="156.5" y="328.1606">image</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="181.5" y1="362.3594" y2="362.3594"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="181.5" x2="181.5" y1="362.3594" y2="375.3594"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="140.5" x2="181.5" y1="375.3594" y2="375.3594"></line><polygon fill="#A80036" points="150.5,371.3594,140.5,375.3594,150.5,379.3594,146.5,375.3594" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="70" x="146.5" y="357.2935">docfx build</text><polygon fill="#A80036" points="434.5,400.4922,444.5,404.4922,434.5,408.4922,438.5,404.4922" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="440.5" y1="404.4922" y2="404.4922"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="51" x="146.5" y="399.4263">git push</text><!--MD5=[b3c48801e660a04404d16c1458384d94]
+<div class="lang-plantUml" \=""> <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="509px" preserveaspectratio="none" style="width:520px;height:509px;" version="1.1" viewbox="0 0 520 509" width="520px" zoomandpan="magnify"><defs><filter height="300%" id="f9shlyohixuwq" width="300%" x="-1" y="-1"><fegaussianblur result="blurOut" stddeviation="2.0"></fegaussianblur><fecolormatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"></fecolormatrix><feoffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"></feoffset><feblend in="SourceGraphic" in2="blurOut3" mode="normal"></feblend></filter></defs><g><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="48" x2="48" y1="86.2969" y2="422.4922"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="139.5" x2="139.5" y1="86.2969" y2="422.4922"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="281.5" x2="281.5" y1="86.2969" y2="422.4922"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="446.5" x2="446.5" y1="86.2969" y2="422.4922"></line><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="75" x="8" y="82.9951">Developer</text><ellipse cx="48.5" cy="13" fill="#FEFECE" filter="url(#f9shlyohixuwq)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"></ellipse><path d="M48.5,21 L48.5,48 M35.5,29 L61.5,29 M48.5,48 L35.5,63 M48.5,48 L61.5,63 " fill="none" filter="url(#f9shlyohixuwq)" style="stroke: #A80036; stroke-width: 2.0;"></path><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="75" x="8" y="434.4873">Developer</text><ellipse cx="48.5" cy="447.7891" fill="#FEFECE" filter="url(#f9shlyohixuwq)" rx="8" ry="8" style="stroke: #A80036; stroke-width: 2.0;"></ellipse><path d="M48.5,455.7891 L48.5,482.7891 M35.5,463.7891 L61.5,463.7891 M48.5,482.7891 L35.5,497.7891 M48.5,482.7891 L61.5,497.7891 " fill="none" filter="url(#f9shlyohixuwq)" style="stroke: #A80036; stroke-width: 2.0;"></path><rect fill="#FEFECE" filter="url(#f9shlyohixuwq)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="64" x="105.5" y="51"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="50" x="112.5" y="70.9951">GitHub</text><rect fill="#FEFECE" filter="url(#f9shlyohixuwq)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="64" x="105.5" y="421.4922"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="50" x="112.5" y="441.4873">GitHub</text><rect fill="#FEFECE" filter="url(#f9shlyohixuwq)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="192" x="183.5" y="51"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="178" x="190.5" y="70.9951">GitHub Package Registry</text><rect fill="#FEFECE" filter="url(#f9shlyohixuwq)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="192" x="183.5" y="421.4922"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="178" x="190.5" y="441.4873">GitHub Package Registry</text><rect fill="#FEFECE" filter="url(#f9shlyohixuwq)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="110" x="389.5" y="51"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="96" x="396.5" y="70.9951">GitHub Pages</text><rect fill="#FEFECE" filter="url(#f9shlyohixuwq)" height="30.2969" style="stroke: #A80036; stroke-width: 1.5;" width="110" x="389.5" y="421.4922"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthadjust="spacingAndGlyphs" textlength="96" x="396.5" y="441.4873">GitHub Pages</text><rect fill="#EEEEEE" filter="url(#f9shlyohixuwq)" height="3" style="stroke: #EEEEEE; stroke-width: 1.0;" width="505.5" x="3" y="116.8633"></rect><line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="508.5" y1="116.8633" y2="116.8633"></line><line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="508.5" y1="119.8633" y2="119.8633"></line><rect fill="#EEEEEE" filter="url(#f9shlyohixuwq)" height="23.1328" style="stroke: #000000; stroke-width: 2.0;" width="104" x="203.75" y="106.2969"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthadjust="spacingAndGlyphs" textlength="85" x="209.75" y="122.3638">image build</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="48.5" x2="90.5" y1="160.5625" y2="160.5625"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="90.5" x2="90.5" y1="160.5625" y2="173.5625"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="49.5" x2="90.5" y1="173.5625" y2="173.5625"></line><polygon fill="#A80036" points="59.5,169.5625,49.5,173.5625,59.5,177.5625,55.5,173.5625" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="77" x="55.5" y="155.4966">docker build</text><polygon fill="#A80036" points="269.5,198.6953,279.5,202.6953,269.5,206.6953,273.5,202.6953" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="48.5" x2="275.5" y1="202.6953" y2="202.6953"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="78" x="55.5" y="197.6294">docker push</text><rect fill="#EEEEEE" filter="url(#f9shlyohixuwq)" height="3" style="stroke: #EEEEEE; stroke-width: 1.0;" width="505.5" x="3" y="231.2617"></rect><line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="508.5" y1="231.2617" y2="231.2617"></line><line style="stroke: #000000; stroke-width: 1.0;" x1="3" x2="508.5" y1="234.2617" y2="234.2617"></line><rect fill="#EEEEEE" filter="url(#f9shlyohixuwq)" height="23.1328" style="stroke: #000000; stroke-width: 2.0;" width="60" x="225.75" y="220.6953"></rect><text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthadjust="spacingAndGlyphs" textlength="41" x="231.75" y="236.7622">CI/CD</text><polygon fill="#A80036" points="127.5,270.9609,137.5,274.9609,127.5,278.9609,131.5,274.9609" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="48.5" x2="133.5" y1="274.9609" y2="274.9609"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="51" x="55.5" y="269.895">git push</text><polygon fill="#A80036" points="269.5,300.0938,279.5,304.0938,269.5,308.0938,273.5,304.0938" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="275.5" y1="304.0938" y2="304.0938"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="69" x="146.5" y="299.0278">docker pull</text><polygon fill="#A80036" points="150.5,329.2266,140.5,333.2266,150.5,337.2266,146.5,333.2266" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 2.0,2.0;" x1="144.5" x2="280.5" y1="333.2266" y2="333.2266"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="40" x="156.5" y="328.1606">image</text><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="181.5" y1="362.3594" y2="362.3594"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="181.5" x2="181.5" y1="362.3594" y2="375.3594"></line><line style="stroke: #A80036; stroke-width: 1.0;" x1="140.5" x2="181.5" y1="375.3594" y2="375.3594"></line><polygon fill="#A80036" points="150.5,371.3594,140.5,375.3594,150.5,379.3594,146.5,375.3594" style="stroke: #A80036; stroke-width: 1.0;"></polygon><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="70" x="146.5" y="357.2935">docfx build</text><polygon fill="#A80036" points="434.5,400.4922,444.5,404.4922,434.5,408.4922,438.5,404.4922" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="139.5" x2="440.5" y1="404.4922" y2="404.4922"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthadjust="spacingAndGlyphs" textlength="51" x="146.5" y="399.4263">git push</text><!--MD5=[9f46e2856eead83880b959fe9ecafa9a]
 @startuml
 
 actor "Developer" as DP
@@ -310,9 +362,9 @@ participant "GitHub" as GH
 participant "GitHub Package Registry" as GPR
 participant "GitHub Pages" as GP
 
-== pre process ==
+== image build ==
 DP -> DP: docker build
-DP -> GPR: docker pull
+DP -> GPR: docker push
 
 == CI/CD ==
 DP -> GH: git push
@@ -330,7 +382,11 @@ Default Encoding: UTF-8
 Language: en
 Country: US
 --></g></svg> </div><h1 id="参考文献">参考文献</h1>
-<p><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX Getting Started</a></p>
+<ul>
+<li><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX Getting Started</a></li>
+<li><a href="https://www.mono-project.com/download/stable/#download-lin">mono Download</a></li>
+<li><a href="https://docs.microsoft.com/ja-jp/dotnet/core/install/linux-ubuntu">Ubuntu に .NET Core SDK または .NET Core ランタイムをインストールする</a></li>
+</ul>
 </article>
           </div>
           

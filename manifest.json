@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "C:/Users/TIE305645/Documents/SourceCode/aspnet-on-the-cloud/docfx-documentation/docfx",
+  "source_base_path": "/work/docfx-documentation/docfx",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -11,6 +11,17 @@
         }
       },
       "is_incremental": false
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "_site/_site_pdf/docfx_pdf.pdf",
+      "output": {
+        "resource": {
+          "relative_path": "_site/_site_pdf/docfx_pdf.pdf"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
     },
     {
       "type": "Resource",
@@ -51,7 +62,7 @@
       "output": {
         ".html": {
           "relative_path": "documents/DocFX.html",
-          "hash": "3VI6W2Y2jSPYxToE9teV/Q=="
+          "hash": "MxjFCwJhV0GMBQwTaGUcQA=="
         }
       },
       "is_incremental": false,
@@ -63,7 +74,7 @@
       "output": {
         ".html": {
           "relative_path": "documents/DotNet.html",
-          "hash": "NM2Fj7aFtqEq9VQ8+Qq/Tw=="
+          "hash": "1QEu88SbXsEaHwK+m8PfGw=="
         }
       },
       "is_incremental": false,
@@ -75,7 +86,7 @@
       "output": {
         ".html": {
           "relative_path": "documents/Test.html",
-          "hash": "SA+eKNI5Iz9PtpqNfnxEvA=="
+          "hash": "hpicYeMvjyeyjn2qXWw4Eg=="
         }
       },
       "is_incremental": false,
@@ -110,7 +121,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "wPiWSXk7ujrpa+1iWWIliw=="
+          "hash": "5aJ25ZuySE5a53V0lmRjlA=="
         }
       },
       "is_incremental": false,
@@ -122,7 +133,7 @@
       "output": {
         ".html": {
           "relative_path": "obj/api/MathLibrary.MyMath.html",
-          "hash": "wng3HDxdgVTm1PSGArW7dw=="
+          "hash": "LFJiUdRUwlz0C/ssTbqQ+Q=="
         }
       },
       "is_incremental": false,
@@ -134,7 +145,7 @@
       "output": {
         ".html": {
           "relative_path": "obj/api/MathLibrary.html",
-          "hash": "EyjIj7XS5tkOdQ3fRWhOxA=="
+          "hash": "4Mp7/uIjh/5Cy+JlUuGieA=="
         }
       },
       "is_incremental": false,
@@ -146,7 +157,7 @@
       "output": {
         ".html": {
           "relative_path": "obj/api/MathLibraryTest.MyMathTest.html",
-          "hash": "84eY4DPv90adTlWznkDTfQ=="
+          "hash": "B4PNm8pWWpUTJV8rMVJ/8g=="
         }
       },
       "is_incremental": false,
@@ -158,7 +169,7 @@
       "output": {
         ".html": {
           "relative_path": "obj/api/MathLibraryTest.html",
-          "hash": "I1bkLhzZ1x12lQD06vTMfA=="
+          "hash": "Xc9mSZEcAP+S3Bw2qPxCng=="
         }
       },
       "is_incremental": false,
@@ -182,7 +193,7 @@
       "output": {
         ".html": {
           "relative_path": "restapi/contacts.html",
-          "hash": "0zMYhtY/U3yzhPRycrjFpA=="
+          "hash": "UQ8SqZK95zXwlRhGCQwszg=="
         }
       },
       "is_incremental": false,
@@ -194,7 +205,7 @@
       "output": {
         ".html": {
           "relative_path": "restapi/petstore.html",
-          "hash": "8HQ1jmbUk+4JfALx7FxAyg=="
+          "hash": "Do2EXKO/pOE2HnOUFxWJkw=="
         }
       },
       "is_incremental": false,
@@ -258,13 +269,14 @@
         "full_build_reason_code": "ConfigChanged"
       },
       "processors": {
-        "ConceptualDocumentProcessor": {
+        "RestApiDocumentProcessor": {
           "can_incremental": false,
+          "details": "Processor RestApiDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 4,
+          "total_file_count": 0,
           "skipped_file_count": 0
         },
-        "ManagedReferenceDocumentProcessor": {
+        "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 4,
@@ -277,18 +289,17 @@
           "total_file_count": 0,
           "skipped_file_count": 0
         },
-        "RestApiDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor RestApiDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
           "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
           "skipped_file_count": 0
         }
       }
