@@ -1,0 +1,50 @@
+@model CRUD.Models.USERLIST
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>編集</h3>
+<p><a href="/Home/Index">一覧へ</a></p>
+<form action="/Home/Edit" method="post">
+
+　　<!-- csrf対策用のtokenを送付 -->
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <!-- id -->
+        <input type="hidden" name="id" value="@Model.Id"/>
+        <!-- Userid -->
+        <div class="form-group">
+            <label class="control-label col-md-2">ユーザID</label>
+            <div class="col-md-10">
+                <!--既存値を初期表示-->
+                <input type="text" name="Userid" class="form-control" value="@Model.Userid"/> 
+                @Html.ValidationMessageFor(model => model.Userid, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <!-- Name -->
+        <div class="form-group">
+            <label class="control-label col-md-2">名前</label>
+            <div class="col-md-10">
+                <input type="text" name="name" class="form-control" value="@Model.Name"/>
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <!-- Age -->
+        <div class="form-group">
+            <label class="control-label col-md-2">年齢</label>
+            <div class="col-md-10">
+                <input type="text" name="age" class="form-control" value="@Model.Age"/>
+                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <!-- D_CRT -->
+        <input type="hidden" name="D_CRT" value="@Model.D_CRT"/>
+        <!-- submit -->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="更新" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
