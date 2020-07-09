@@ -27,8 +27,9 @@ namespace CRUD
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<MvcCRUDContext>(options =>
-                    options.UseSqlite(Configuration.GetConnectionString("MvcCRUDContext")));
+    services.AddDbContext<MvcCRUDContext>(options =>
+        options.UseSqlite(Configuration.GetConnectionString("MvcCRUDContext")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

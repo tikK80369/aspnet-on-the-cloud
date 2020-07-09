@@ -1,4 +1,4 @@
-@model CRUD.Models.USERLIST
+@model CRUD.Models.UserListModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,6 +8,9 @@
 <h3>削除しますか？</h3>
 
 <dl class="dl-horizontal">
+    <dt>ID</dt>
+    <dd>@Model.Id</dd>
+
     <dt>ユーザID</dt>
     <dd>@Model.Userid</dd>
 

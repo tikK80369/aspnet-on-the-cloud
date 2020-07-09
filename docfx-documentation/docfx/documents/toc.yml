@@ -4,3 +4,6 @@
   href: DocFX.md
 - name: テスト方法
   href: Test.md
+- name: 機能検証
+  - name: No.5 データのCRUD
+    href: No5-CRUD.md

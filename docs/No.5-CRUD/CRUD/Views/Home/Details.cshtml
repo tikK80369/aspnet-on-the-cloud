@@ -1,4 +1,4 @@
-@model CRUD.Models.USERLIST
+@model CRUD.Models.UserListModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -7,6 +7,10 @@
 <p><a href="/Home/Index">一覧へ</a></p>
 
 <table class="table">
+    <tr>
+        <th>Id</th>
+        <td>@Model.Id</td>
+    </tr>
     <tr>
         <th>Userid</th>
         <td>@Model.Userid</td>
