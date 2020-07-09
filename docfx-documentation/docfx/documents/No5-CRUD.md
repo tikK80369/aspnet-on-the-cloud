@@ -548,7 +548,7 @@ URLの末尾で主キー(Id)の値：2 が渡されており、この値をも�
     - .Farst：一致するデータがないとExceptionが発生するので注意が必要  
     - .Find：Listが持っているメンバメソッドのため、List以外では使えない  
     - .FirstOrDefault：IEnumerableに（拡張メソッドとして）実装されているのでどんなリストの型でも使える  
-- 
+
 
 # 参考文献
 - [ASP.NET Core MVC で Web アプリを作成する](https://docs.microsoft.com/ja-jp/aspnet/core/tutorials/first-mvc-app/?view=aspnetcore-3.1)
